@@ -1,0 +1,109 @@
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.pageTitle {
+  font-size: var(--size-2xl);
+  font-weight: var(--weight-black);
+  color: var(--color-text-strong);
+  margin-bottom: var(--space-1);
+}
+
+.currencySelector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.currencyLabel {
+  font-weight: var(--weight-semi);
+  color: var(--color-text-muted);
+  font-size: var(--size-md);
+}
+
+.select {
+  font-family: inherit;
+  font-size: var(--size-md);
+  font-weight: var(--weight-semi);
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.select:focus { border-color: var(--color-primary); }
+
+.tableCard { border-radius: var(--radius-lg); }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.th {
+  padding: var(--space-4) var(--space-4);
+  text-align: start;
+  font-size: var(--size-sm);
+  font-weight: var(--weight-semi);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+  background: var(--color-surface);
+}
+
+.sortTh {
+  padding: var(--space-4) var(--space-4);
+  text-align: start;
+  font-size: var(--size-sm);
+  font-weight: var(--weight-semi);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  background: var(--color-surface);
+  transition: color var(--transition);
+}
+
+.sortTh:hover { color: var(--color-primary); }
+
+.sortIcon { margin-inline-start: var(--space-1); font-size: var(--size-xs); }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.pageNum {
+  font-size: var(--size-md);
+  font-weight: var(--weight-semi);
+  min-width: 5rem;
+  text-align: center;
+}
+
+.errorBox {
+  background: rgba(248,113,113,0.1);
+  border: 2px solid var(--color-loss);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-6);
+  color: var(--color-loss);
+  font-weight: var(--weight-semi);
+  margin-bottom: var(--space-6);
+}

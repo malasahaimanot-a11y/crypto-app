@@ -1,0 +1,44 @@
+.row {
+  cursor: pointer;
+  transition: background var(--transition);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.row:hover, .row:focus-within {
+  background: var(--color-surface-2);
+}
+
+.row:focus {
+  outline: 3px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.rank {
+  padding: var(--space-4) var(--space-4);
+  color: var(--color-text-muted);
+  font-weight: var(--weight-semi);
+  font-size: var(--size-sm);
+  min-width: 3rem;
+  text-align: center;
+}
+
+.coinCell {
+  padding: var(--space-4) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 160px;
+}
+
+.coinIcon {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.numCell {
+  padding: var(--space-4) var(--space-4);
+  font-weight: var(--weight-semi);
+  font-size: var(--size-md);
+  white-space: nowrap;
+  text-align: left;
+}

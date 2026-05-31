@@ -1,0 +1,91 @@
+.pageTitle {
+  font-size: var(--size-2xl);
+  font-weight: var(--weight-black);
+  color: var(--color-text-strong);
+  margin-bottom: var(--space-2);
+}
+
+.section {
+  margin-bottom: var(--space-6);
+  max-width: 640px;
+}
+
+.sectionTitle {
+  font-size: var(--size-lg);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--space-5);
+  color: var(--color-text);
+}
+
+.optionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.option {
+  display: block;
+  cursor: pointer;
+}
+
+.optionInner {
+  display: flex;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.option:hover .optionInner {
+  border-color: var(--color-primary);
+  background: rgba(56,189,248,0.05);
+}
+
+.optionActive .optionInner {
+  border-color: var(--color-primary);
+  background: rgba(56,189,248,0.1);
+}
+
+.option input:focus-visible + .optionInner {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.optionLabel {
+  font-size: var(--size-md);
+  font-weight: var(--weight-medium);
+}
+
+/* Toggle switch */
+.toggle {
+  position: relative;
+  width: 56px;
+  height: 30px;
+  border-radius: 15px;
+  background: var(--color-border);
+  border: 2px solid var(--color-border);
+  transition: background var(--transition), border-color var(--transition);
+  flex-shrink: 0;
+}
+
+.toggleOn {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  inset-inline-start: 2px;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  transition: inset-inline-start var(--transition);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.toggleOn .toggleKnob {
+  inset-inline-start: calc(100% - 24px);
+}

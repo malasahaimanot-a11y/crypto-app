@@ -1,0 +1,207 @@
+/* ============================================================
+   Design tokens — banking-quality high-contrast theme
+   ============================================================ */
+:root {
+  /* Palette */
+  --color-bg:           #0f172a;
+  --color-surface:      #1e293b;
+  --color-surface-2:    #263348;
+  --color-border:       #334155;
+  --color-primary:      #38bdf8;
+  --color-primary-dark: #0ea5e9;
+  --color-accent:       #818cf8;
+  --color-gain:         #22c55e;
+  --color-loss:         #f87171;
+  --color-neutral:      #94a3b8;
+  --color-text:         #f1f5f9;
+  --color-text-muted:   #94a3b8;
+  --color-text-strong:  #ffffff;
+
+  /* Typography */
+  --font-base:   'Rubik', 'Inter', system-ui, sans-serif;
+  --size-xs:     0.8125rem;
+  --size-sm:     0.9375rem;
+  --size-md:     1.0625rem;
+  --size-lg:     1.25rem;
+  --size-xl:     1.5rem;
+  --size-2xl:    1.875rem;
+  --size-3xl:    2.25rem;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semi:   600;
+  --weight-bold:   700;
+  --weight-black:  800;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Shadow */
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.45);
+  --shadow-inset: inset 0 1px 0 rgba(255,255,255,0.06);
+
+  /* Transition */
+  --transition: 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+/* High-contrast mode overrides */
+@media (prefers-contrast: more) {
+  :root {
+    --color-bg:         #000000;
+    --color-surface:    #0d0d0d;
+    --color-surface-2:  #1a1a1a;
+    --color-border:     #ffffff;
+    --color-text:       #ffffff;
+    --color-text-muted: #e0e0e0;
+    --color-primary:    #7dd3fc;
+    --color-gain:       #4ade80;
+    --color-loss:       #fca5a5;
+  }
+}
+
+/* ============================================================
+   Base reset
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-base);
+  font-size: var(--size-md);
+  font-weight: var(--weight-normal);
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  direction: rtl;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Default LTR for numbers/prices */
+.ltr { direction: ltr; unicode-bidi: embed; }
+
+/* Focus ring — accessible, visible */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img { max-width: 100%; height: auto; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-neutral); }
+
+/* Utility classes */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card), var(--shadow-inset);
+  padding: var(--space-6);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--size-md);
+  font-weight: var(--weight-semi);
+  border-radius: var(--radius-md);
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  line-height: 1;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--color-primary-dark);
+  color: #0f172a;
+}
+.btn-primary:hover { background: var(--color-primary); }
+
+.btn-ghost {
+  background: transparent;
+  border: 2px solid var(--color-border);
+  color: var(--color-text);
+}
+.btn-ghost:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+.btn-danger {
+  background: transparent;
+  border: 2px solid var(--color-loss);
+  color: var(--color-loss);
+}
+.btn-danger:hover { background: var(--color-loss); color: #fff; }
+
+.gain { color: var(--color-gain); }
+.loss { color: var(--color-loss); }
+.neutral { color: var(--color-neutral); }
+
+.text-strong { font-weight: var(--weight-bold); color: var(--color-text-strong); }
+.text-muted   { color: var(--color-text-muted); font-size: var(--size-sm); }
+
+/* Skeleton loader */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--color-surface) 25%, var(--color-surface-2) 50%, var(--color-surface) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* Skip-to-content link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-primary);
+  color: #0f172a;
+  padding: var(--space-3) var(--space-6);
+  font-weight: var(--weight-bold);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  z-index: 9999;
+  transition: top var(--transition);
+}
+.skip-link:focus { top: 0; }
