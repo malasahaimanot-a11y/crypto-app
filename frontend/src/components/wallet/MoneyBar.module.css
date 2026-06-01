@@ -1,0 +1,30 @@
+.bar {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.08);
+  gap: 2px;
+}
+
+.growSegment {
+  height: 100%;
+  border-radius: 5px 0 0 5px;
+  background: #16A34A;
+  transition: width var(--w-transition-md);
+  min-width: 6px;
+}
+
+.protSegment {
+  height: 100%;
+  border-radius: 0 5px 5px 0;
+  background: #2563EB;
+  transition: width var(--w-transition-md);
+  min-width: 6px;
+  flex: 1; /* fills remaining space when only one segment */
+}
+
+/* Dark variant (on navy card) */
+.dark .growSegment  { background: #4ADE80; }
+.dark .protSegment  { background: #93C5FD; }
+.dark { background: rgba(255, 255, 255, 0.15); }

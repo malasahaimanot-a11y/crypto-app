@@ -1,0 +1,322 @@
+.page {
+  min-height: 100%;
+  background: var(--w-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 8px;
+}
+
+.backBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--w-surface);
+  border: 1px solid var(--w-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--w-text);
+  cursor: pointer;
+  transition: background var(--w-transition);
+  box-shadow: var(--w-shadow);
+}
+.backBtn:hover { background: var(--w-blue-light); }
+.backBtn:focus-visible { outline: 3px solid var(--w-blue); outline-offset: 2px; }
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+/* ── Status card ────────────────────────────────────────── */
+.statusCard {
+  margin: 4px 16px 12px;
+  background: linear-gradient(135deg, #0B1E3D 0%, #1A3A6E 100%);
+  border-radius: var(--w-radius);
+  padding: 24px 22px;
+  color: white;
+  box-shadow: var(--w-shadow-lg);
+}
+
+.statusQuestion {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.65);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #60A5FA, #34D399);
+  border-radius: 4px;
+  transition: width var(--w-transition-md);
+}
+
+.progressPct {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: white;
+  min-width: 44px;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.statusDesc {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.75);
+  font-weight: 500;
+}
+
+/* ── Explainer ──────────────────────────────────────────── */
+.explainer {
+  margin: 0 16px 12px;
+  background: var(--w-surface);
+  border-radius: var(--w-radius-sm);
+  border: 1px solid var(--w-border);
+  overflow: hidden;
+  box-shadow: var(--w-shadow);
+}
+
+.explainerRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--w-border);
+}
+
+.explainerRow:last-child { border-bottom: none; }
+
+.explainerDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.explainerLabel {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--w-text-2);
+}
+
+.explainerValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--w-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Slider section ─────────────────────────────────────── */
+.sliderSection {
+  margin: 0 16px 12px;
+  background: var(--w-surface);
+  border-radius: var(--w-radius-sm);
+  border: 1px solid var(--w-border);
+  padding: 20px 18px;
+  box-shadow: var(--w-shadow);
+}
+
+.sliderHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sliderTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.riskBadge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--w-radius-pill);
+  transition: all var(--w-transition-md);
+}
+
+.sliderWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sliderLabels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.levelLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: var(--w-radius-xs);
+  transition: color var(--w-transition), background var(--w-transition);
+  font-family: inherit;
+}
+
+.levelLabel:hover { color: var(--w-text-2); background: var(--w-surface-2); }
+.levelLabel:focus-visible { outline: 3px solid var(--w-blue); outline-offset: 2px; }
+
+.levelLabelActive {
+  color: var(--w-navy) !important;
+  background: var(--w-blue-light) !important;
+}
+
+.levelPct {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: inherit;
+  opacity: 0.8;
+}
+
+/* ── Level detail card ──────────────────────────────────── */
+.levelCard {
+  margin: 0 16px 16px;
+  background: var(--w-surface);
+  border-radius: var(--w-radius-sm);
+  border: 1px solid var(--w-border);
+  padding: 18px;
+  box-shadow: var(--w-shadow);
+}
+
+.levelCardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.levelIcon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.levelCardTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--w-text);
+  margin-bottom: 3px;
+}
+
+.levelCardSub {
+  font-size: 0.85rem;
+  color: var(--w-text-2);
+  line-height: 1.5;
+}
+
+.levelCardBars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.levelBarRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.levelBarLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--w-text-2);
+  width: 52px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.levelBarTrack {
+  flex: 1;
+  height: 8px;
+  background: var(--w-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.levelBarFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width var(--w-transition-md);
+}
+
+.levelBarProtected { background: linear-gradient(90deg, #60A5FA, #3B82F6); }
+.levelBarBtc { background: linear-gradient(90deg, #FBBF24, #F7931A); }
+
+.levelBarPct {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--w-text);
+  width: 32px;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Save button ────────────────────────────────────────── */
+.saveWrap {
+  padding: 4px 16px 16px;
+}
+
+.saveBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--w-primary);
+  color: #0A0A0A;
+  border: none;
+  border-radius: var(--w-radius-pill);
+  padding: 18px 24px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--w-transition);
+  box-shadow: 0 4px 20px rgba(11, 30, 61, 0.22);
+  min-height: 58px;
+}
+
+.saveBtn:hover { filter: brightness(1.1); }
+.saveBtn:active { transform: scale(0.97); }
+.saveBtn:focus-visible { outline: 3px solid var(--w-blue); outline-offset: 3px; }
+
+.saveBtnSuccess {
+  background: var(--w-green) !important;
+  box-shadow: 0 4px 20px rgba(22, 163, 74, 0.28) !important;
+}

@@ -1,0 +1,134 @@
+/* ============================================================
+   Wallet — fintech design tokens
+   Deep blue · White · Growth green
+   ============================================================ */
+:root {
+  /* ── Background & surfaces ─────────────────────── */
+  --w-bg:              #EEF2F7;
+  --w-surface:         #FFFFFF;
+  --w-surface-2:       #F8FAFC;
+
+  /* ── Primary — deep navy blue ───────────────────── */
+  --w-primary:         #1B3A6B;
+  --w-primary-2:       #2552A8;
+  --w-primary-light:   #EBF5FF;
+
+  /* ── Growing money (green) ──────────────────────── */
+  --w-green:           #16A34A;
+  --w-green-2:         #15803D;
+  --w-green-light:     #DCFCE7;
+
+  /* ── Protected money (blue) ─────────────────────── */
+  --w-blue:            #2563EB;
+  --w-blue-2:          #1D4ED8;
+  --w-blue-light:      #DBEAFE;
+
+  /* ── Status ─────────────────────────────────────── */
+  --w-red:             #DC2626;
+  --w-red-light:       #FEE2E2;
+  --w-amber:           #D97706;
+  --w-amber-light:     #FEF3C7;
+
+  /* ── Typography ─────────────────────────────────── */
+  --w-text:            #0F1923;
+  --w-text-2:          #475569;
+  --w-text-muted:      #94A3B8;
+
+  /* ── Structure ──────────────────────────────────── */
+  --w-border:          #E2E8F0;
+  --w-border-2:        #CBD5E1;
+  --w-shadow:          0 2px 12px rgba(15, 25, 35, 0.06);
+  --w-shadow-md:       0 4px 20px rgba(15, 25, 35, 0.09);
+  --w-shadow-lg:       0 8px 40px rgba(15, 25, 35, 0.13);
+  --w-radius:          20px;
+  --w-radius-sm:       12px;
+  --w-radius-xs:       8px;
+  --w-radius-pill:     100px;
+  --w-transition:      200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --w-transition-md:   320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.wallet-active {
+  background: var(--w-bg);
+  color: var(--w-text);
+}
+
+/* ── Range slider ────────────────────────────────── */
+.wSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+.wSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--w-primary);
+  border: 3px solid white;
+  box-shadow: 0 2px 10px rgba(27, 58, 107, 0.35);
+  cursor: pointer;
+  transition: transform var(--w-transition), box-shadow var(--w-transition);
+}
+.wSlider::-webkit-slider-thumb:active {
+  transform: scale(1.2);
+  box-shadow: 0 4px 18px rgba(27, 58, 107, 0.5);
+}
+.wSlider::-moz-range-thumb {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--w-primary);
+  border: 3px solid white;
+  box-shadow: 0 2px 10px rgba(27, 58, 107, 0.35);
+  cursor: pointer;
+}
+
+/* ── Animations ──────────────────────────────────── */
+@keyframes wFadeSlide {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+.wStepIn { animation: wFadeSlide 340ms cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+@keyframes wPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.wCursorBlink { animation: wPulse 1s step-end infinite; }
+
+@keyframes wRipple {
+  0%   { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes wCheckDraw {
+  from { stroke-dashoffset: 50; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes wBarGrow {
+  from { width: 0; }
+  to   { /* width set inline */ }
+}
+
+@keyframes wSlideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+@keyframes wShake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+.wShake { animation: wShake 0.4s ease; }
+
+@keyframes wSpin {
+  to { transform: rotate(360deg); }
+}
+.wSpin { animation: wSpin 0.8s linear infinite; }

@@ -1,0 +1,349 @@
+.page {
+  padding: 0 0 8px;
+  background: var(--w-bg);
+  min-height: 100%;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 8px;
+}
+
+.greeting {
+  line-height: 1.2;
+}
+
+.greetSub {
+  font-size: 0.85rem;
+  color: var(--w-text-muted);
+  font-weight: 400;
+}
+
+.greetName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.settingsBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--w-surface);
+  border: 1px solid var(--w-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--w-text-2);
+  cursor: pointer;
+  transition: background var(--w-transition), color var(--w-transition);
+  box-shadow: var(--w-shadow);
+}
+
+.settingsBtn:hover {
+  background: var(--w-blue-light);
+  color: var(--w-navy);
+}
+
+.settingsBtn:focus-visible {
+  outline: 3px solid var(--w-blue);
+  outline-offset: 2px;
+}
+
+/* ── Balance card ───────────────────────────────────────── */
+.cardWrap {
+  padding: 12px 16px 0;
+}
+
+.balanceCard {
+  background: linear-gradient(145deg, #F7931A 0%, #E8820A 55%, #D97706 100%);
+  border-radius: var(--w-radius);
+  padding: 28px 24px 24px;
+  color: #0A0A0A;
+  box-shadow: 0 12px 48px rgba(247, 147, 26, 0.30);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative highlight */
+.balanceCard::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cardLabel {
+  font-size: 0.82rem;
+  color: rgba(0,0,0,0.55);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+}
+
+.balanceAmount {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #0A0A0A;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.change24h {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0A0A0A;
+  background: rgba(0,0,0,0.12);
+  padding: 3px 10px;
+  border-radius: var(--w-radius-pill);
+  margin-bottom: 20px;
+  direction: ltr;
+}
+
+.changeArrow {
+  font-size: 0.75rem;
+}
+
+.changePeriod {
+  color: rgba(0,0,0,0.5);
+  font-weight: 500;
+  direction: rtl;
+}
+
+.splitRow {
+  display: flex;
+  gap: 10px;
+}
+
+.pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: var(--w-radius-sm);
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: rgba(0,0,0,0.82);
+  flex-wrap: wrap;
+}
+
+.pillDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pillAmount {
+  font-weight: 700;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pillPct {
+  font-size: 0.72rem;
+  color: rgba(0,0,0,0.45);
+  margin-right: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Action buttons ─────────────────────────────────────── */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 20px 16px 8px;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  border-radius: var(--w-radius);
+  padding: 18px 20px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform var(--w-transition), box-shadow var(--w-transition), filter var(--w-transition);
+  min-height: 64px;
+}
+
+.actionBtn:active {
+  transform: scale(0.96);
+}
+
+.actionBtn:focus-visible {
+  outline: 3px solid var(--w-blue);
+  outline-offset: 3px;
+}
+
+.sendBtn {
+  background: var(--w-primary);
+  color: #0A0A0A;
+  box-shadow: 0 4px 16px rgba(247, 147, 26, 0.30);
+}
+
+.sendBtn:hover {
+  filter: brightness(1.1);
+}
+
+.receiveBtn {
+  background: var(--w-green);
+  color: white;
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.25);
+}
+
+.receiveBtn:hover {
+  filter: brightness(1.05);
+}
+
+.actionIcon {
+  display: flex;
+  align-items: center;
+}
+
+/* ── Activity section ───────────────────────────────────── */
+.activity {
+  padding: 16px 16px 0;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.seeAllBtn {
+  font-size: 0.85rem;
+  color: var(--w-blue);
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: opacity var(--w-transition);
+}
+
+.seeAllBtn:hover {
+  opacity: 0.75;
+}
+
+.txList {
+  background: var(--w-surface);
+  border-radius: var(--w-radius);
+  overflow: hidden;
+  box-shadow: var(--w-shadow);
+}
+
+.txRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--w-border);
+  transition: background var(--w-transition);
+  width: 100%;
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: right;
+}
+
+.txRow:last-child {
+  border-bottom: none;
+}
+
+.txRow:hover {
+  background: var(--w-surface-2);
+}
+
+.txRow:focus-visible {
+  outline: 3px solid var(--w-blue);
+  outline-offset: -3px;
+}
+
+.txIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.txIconReceive {
+  background: var(--w-green-light);
+  color: var(--w-green);
+}
+
+.txIconSend {
+  background: var(--w-red-light);
+  color: var(--w-red);
+}
+
+.txMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.txDesc {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--w-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.txDate {
+  font-size: 0.8rem;
+  color: var(--w-text-muted);
+}
+
+.txAmount {
+  font-size: 0.98rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.txAmountReceive {
+  color: var(--w-green);
+}
+
+.txAmountSend {
+  color: var(--w-text-2);
+}

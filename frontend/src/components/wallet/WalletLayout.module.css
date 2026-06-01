@@ -1,0 +1,43 @@
+.root {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--w-bg);
+  color: var(--w-text);
+  font-family: var(--font-base);
+}
+
+.screen {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  background: var(--w-bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 84px;
+}
+
+.skipLink {
+  position: absolute;
+  top: -100%;
+  right: 50%;
+  transform: translateX(50%);
+  background: var(--w-navy);
+  color: white;
+  padding: 8px 24px;
+  font-weight: 600;
+  border-radius: 0 0 var(--w-radius-sm) var(--w-radius-sm);
+  z-index: 9999;
+  transition: top var(--w-transition);
+  text-decoration: none;
+}
+.skipLink:focus {
+  top: 0;
+}
