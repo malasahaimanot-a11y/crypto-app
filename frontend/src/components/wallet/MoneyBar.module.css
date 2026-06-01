@@ -18,7 +18,7 @@
 .protSegment {
   height: 100%;
   border-radius: 0 5px 5px 0;
-  background: #2563EB;
+  background: #E8920A;
   transition: width var(--w-transition-md);
   min-width: 6px;
   flex: 1; /* fills remaining space when only one segment */

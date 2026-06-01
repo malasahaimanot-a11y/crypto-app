@@ -244,7 +244,7 @@ export default function OnboardingPage() {
   }
 
   function handleDone() {
-    navigate('/wallet', { replace: true });
+    navigate('/', { replace: true });
   }
 
   return (

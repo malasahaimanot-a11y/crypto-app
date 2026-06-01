@@ -6,7 +6,7 @@ import styles from './WalletLayout.module.css';
 export default function WalletLayout() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const hideNav = pathname === '/wallet/onboard';
+  const hideNav = pathname === '/onboard' || pathname === '/deposit';
 
   useEffect(() => {
     document.body.classList.add('wallet-active');
@@ -14,8 +14,8 @@ export default function WalletLayout() {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('satoshi_onboarded') && pathname !== '/wallet/onboard') {
-      navigate('/wallet/onboard', { replace: true });
+    if (!localStorage.getItem('satoshi_onboarded') && pathname !== '/onboard') {
+      navigate('/onboard', { replace: true });
     }
   }, [pathname, navigate]);
 

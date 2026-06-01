@@ -75,7 +75,7 @@ export default function ReceivePage() {
     <div className={styles.page}>
       {/* Header */}
       <header className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate('/wallet')} aria-label="חזור">
+        <button className={styles.backBtn} onClick={() => navigate('/')} aria-label="חזור">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
             stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>

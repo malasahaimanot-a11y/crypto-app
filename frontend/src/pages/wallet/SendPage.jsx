@@ -35,7 +35,7 @@ export default function SendPage() {
   function handleSend() {
     if (!canSend) return;
     setSent(true);
-    setTimeout(() => navigate('/wallet'), 2200);
+    setTimeout(() => navigate('/'), 2200);
   }
 
   if (sent) {
@@ -55,7 +55,7 @@ export default function SendPage() {
     <div className={styles.page}>
       {/* Header */}
       <header className={styles.header}>
-        <button className={styles.backBtn} onClick={() => navigate('/wallet')} aria-label="חזור">
+        <button className={styles.backBtn} onClick={() => navigate('/')} aria-label="חזור">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
             stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -78,7 +78,7 @@ export default function SendPage() {
       {amountNum > 0 && (
         <div className={styles.feeBadge} role="status">
           <span aria-hidden="true">⚡</span>
-          <span>עמלה: ~₪0.01 (כמעט חינם)</span>
+          <span>עמלה: אפסית ⚡</span>
         </div>
       )}
 

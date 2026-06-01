@@ -1,0 +1,412 @@
+.page {
+  min-height: 100%;
+  background: var(--w-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ──────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 8px;
+  flex-shrink: 0;
+}
+
+.backBtn {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--w-surface);
+  color: var(--w-text);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background var(--w-transition);
+  flex-shrink: 0;
+}
+.backBtn:hover { background: var(--w-surface-2); }
+.backBtn:focus-visible { outline: 3px solid var(--w-accent); outline-offset: 2px; }
+
+.title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+/* ── Progress ────────────────────────────────────────── */
+.progress {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 0 4px;
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 4px;
+  background: var(--w-border-2);
+  transition: width var(--w-transition-md), background var(--w-transition);
+}
+
+.dotActive { width: 28px; background: var(--w-accent); }
+.dotDone   { background: var(--w-accent-light); border: 1.5px solid var(--w-accent); }
+
+/* ── Step wrapper ────────────────────────────────────── */
+.stepWrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px 0;
+  min-height: 0;
+}
+
+.stepHint {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--w-text);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* ── Amount entry ────────────────────────────────────── */
+.amountArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 0 4px;
+}
+
+.currency {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  line-height: 1;
+}
+
+.amountNum {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--w-text);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.amountPlaceholder { color: var(--w-border-2); }
+
+.cursor {
+  font-size: 2.8rem;
+  color: var(--w-accent);
+  font-weight: 300;
+  line-height: 1;
+  margin-right: -6px;
+}
+
+/* ── Split preview ───────────────────────────────────── */
+.splitPreview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--w-text-2);
+  font-weight: 500;
+  padding: 8px 0 4px;
+}
+
+.splitAccent { color: var(--w-accent); }
+.splitShield {}
+.splitSep { color: var(--w-text-muted); font-weight: 400; }
+
+/* ── Numpad ──────────────────────────────────────────── */
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 16px 0 0;
+}
+
+.key {
+  aspect-ratio: 1.4;
+  border: none;
+  background: var(--w-surface);
+  border-radius: var(--w-radius-sm);
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: var(--w-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--w-transition), transform var(--w-transition);
+  font-family: inherit;
+}
+
+.key:hover  { background: var(--w-surface-2); }
+.key:active { transform: scale(0.93); }
+.key:focus-visible { outline: 3px solid var(--w-accent); outline-offset: 2px; }
+
+.keyBack { color: var(--w-text-2); }
+
+/* ── Footer / CTA ────────────────────────────────────── */
+.footer {
+  padding: 20px 0 24px;
+  flex-shrink: 0;
+}
+
+.ctaBtn {
+  width: 100%;
+  padding: 17px;
+  border-radius: var(--w-radius-pill);
+  border: none;
+  background: var(--w-accent);
+  color: #0D0D0D;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity var(--w-transition), transform var(--w-transition);
+  box-shadow: 0 4px 16px rgba(232, 146, 10, 0.25);
+}
+
+.ctaBtn:hover  { opacity: 0.9; }
+.ctaBtn:active { transform: scale(0.98); }
+.ctaBtn:focus-visible { outline: 3px solid var(--w-accent-dark); outline-offset: 3px; }
+
+.ctaBtnDisabled {
+  background: var(--w-border);
+  color: var(--w-text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.ctaBtnDisabled:hover { opacity: 1; }
+
+.disclaimer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--w-text-muted);
+  margin-top: 10px;
+  line-height: 1.4;
+}
+
+/* ── Payment method cards ────────────────────────────── */
+.methodList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.methodCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+  border: 1.5px solid var(--w-border);
+  border-radius: var(--w-radius-sm);
+  background: var(--w-bg);
+  cursor: pointer;
+  text-align: right;
+  font-family: inherit;
+  transition: border-color var(--w-transition), background var(--w-transition);
+}
+
+.methodCard:hover { border-color: var(--w-accent); }
+.methodCard:focus-visible { outline: 3px solid var(--w-accent); outline-offset: 2px; }
+
+.methodSelected {
+  border-color: var(--w-accent) !important;
+  background: var(--w-accent-light) !important;
+}
+
+.methodIcon {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.methodInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.methodTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--w-text);
+}
+
+.methodSub {
+  font-size: 0.78rem;
+  color: var(--w-text-muted);
+}
+
+.methodCheck {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--w-border-2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: transparent;
+  transition: background var(--w-transition), border-color var(--w-transition), color var(--w-transition);
+}
+
+.methodCheckOn {
+  background: var(--w-accent);
+  border-color: var(--w-accent);
+  color: #0D0D0D;
+}
+
+/* ── Confirm card ────────────────────────────────────── */
+.confirmCard {
+  background: var(--w-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  overflow: hidden;
+  box-shadow: var(--w-shadow);
+}
+
+.confirmTotal {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirmTotalLabel {
+  font-size: 0.88rem;
+  color: var(--w-text-2);
+  font-weight: 500;
+}
+
+.confirmTotalAmt {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--w-text);
+  letter-spacing: -0.02em;
+}
+
+.confirmDivider {
+  height: 1px;
+  background: var(--w-border);
+  margin: 0 20px;
+}
+
+.confirmSplitTitle {
+  padding: 14px 20px 8px;
+  font-size: 0.82rem;
+  color: var(--w-text-muted);
+  font-weight: 500;
+}
+
+.confirmSplit {
+  padding: 0 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.confirmSplitRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.confirmSplitIcon {
+  width: 32px; height: 32px;
+  border-radius: var(--w-radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.iconGold { background: var(--w-accent-light); }
+.iconGrey { background: var(--w-surface-2); }
+
+.confirmSplitLabel {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--w-text);
+}
+
+.confirmSplitPct {
+  font-size: 0.8rem;
+  color: var(--w-text-muted);
+}
+
+.confirmSplitAmt {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--w-text);
+  min-width: 72px;
+  text-align: left;
+}
+
+.confirmMeta {
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirmMetaKey {
+  font-size: 0.83rem;
+  color: var(--w-text-muted);
+}
+
+.confirmMetaVal {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--w-text);
+}
+
+/* ── Processing screen ───────────────────────────────── */
+.processingScreen {
+  min-height: 100vh;
+  background: var(--w-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px 24px;
+}
+
+.spinnerWrap {
+  position: relative;
+  width: 72px; height: 72px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.btcBadge {
+  position: absolute;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.processingTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--w-text);
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.processingSub {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--w-accent);
+  text-align: center;
+}
+
+.processingDetail {
+  font-size: 0.85rem;
+  color: var(--w-text-muted);
+  text-align: center;
+}
