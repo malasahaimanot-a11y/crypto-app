@@ -246,6 +246,35 @@
   margin: 0;
 }
 
+/* ── Simulate receive ───────────────────────────────────── */
+.simulateBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: var(--w-accent-light);
+  border: 1.5px solid var(--w-accent);
+  color: var(--w-accent-dark);
+  border-radius: var(--w-radius-sm);
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--w-transition);
+}
+.simulateBtn:hover { background: #fde68a; }
+.simulateBtn:focus-visible { outline: 3px solid var(--w-accent); outline-offset: 2px; }
+
+.simulatedMsg {
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--w-green);
+  padding: 14px;
+}
+
 /* ── Share section ──────────────────────────────────────── */
 .shareSection {
   padding: 4px 16px 16px;

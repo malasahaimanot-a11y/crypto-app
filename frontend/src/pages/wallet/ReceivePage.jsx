@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockWallet, formatILS } from '../../data/mockWalletData.js';
+import { formatILS } from '../../data/mockWalletData.js';
+import { useWallet } from '../../contexts/WalletContext.jsx';
 import styles from './ReceivePage.module.css';
 
 /* Renders a decorative mock QR code (21×21, accurate finder patterns) */
@@ -59,16 +60,29 @@ function MockQR({ size = 220 }) {
 
 export default function ReceivePage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState('open'); // open | amount
+  const { user, receivePayment } = useWallet();
+  const [mode, setMode]                 = useState('open');
   const [requestAmount, setRequestAmount] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied]             = useState(false);
+  const [simulated, setSimulated]       = useState(false);
 
-  const { lightning, onchain } = mockWallet.address;
-  const shortOnchain = `${onchain.slice(0, 12)}...${onchain.slice(-8)}`;
+  const lightning   = user?.lightningAddress ?? 'loading...';
+  const onchain     = user?.mockAddress      ?? 'loading...';
+  const shortOnchain = onchain.length > 20
+    ? `${onchain.slice(0, 12)}...${onchain.slice(-8)}`
+    : onchain;
 
   function copyAddress() {
+    navigator.clipboard?.writeText(lightning).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  }
+
+  function simulateReceive() {
+    const amt = parseFloat(requestAmount) || 250;
+    receivePayment(amt, 'חבר');
+    setSimulated(true);
+    setTimeout(() => navigate('/'), 1800);
   }
 
   return (
@@ -183,6 +197,19 @@ export default function ReceivePage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Simulate receive (demo) */}
+      <div className={styles.shareSection}>
+        {simulated ? (
+          <p className={styles.simulatedMsg} aria-live="polite">✓ תשלום התקבל! חוזר לדף הבית...</p>
+        ) : (
+          <button className={styles.simulateBtn} onClick={simulateReceive}
+            aria-label="סמלץ קבלת תשלום">
+            <span aria-hidden="true">⚡</span>
+            הדמה: קיבלתי {requestAmount ? formatILS(parseFloat(requestAmount) || 0) : '₪250'}
+          </button>
+        )}
       </div>
 
       {/* Share button */}

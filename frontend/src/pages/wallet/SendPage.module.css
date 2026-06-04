@@ -79,6 +79,28 @@
   margin-right: -4px;
 }
 
+/* ── Balance hint ───────────────────────────────────────── */
+.balanceHint {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--w-text-muted);
+  padding: 8px 20px 0;
+}
+
+.errorBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--w-red);
+  background: var(--w-red-light);
+  border-radius: var(--w-radius-pill);
+  padding: 5px 16px;
+  margin: 0 auto 4px;
+  width: fit-content;
+}
+
 /* ── Fee badge ──────────────────────────────────────────── */
 .feeBadge {
   display: flex;

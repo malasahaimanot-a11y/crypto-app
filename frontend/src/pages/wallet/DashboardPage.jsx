@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockWallet, formatILS } from '../../data/mockWalletData.js';
+import { formatILS } from '../../data/mockWalletData.js';
+import { useWallet } from '../../contexts/WalletContext.jsx';
 import { useBtcPrice } from '../../hooks/useBtcPrice.js';
 import PageDecor from '../../components/wallet/PageDecor.jsx';
 import styles from './DashboardPage.module.css';
@@ -8,16 +9,24 @@ import styles from './DashboardPage.module.css';
 export default function DashboardPage() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, balance, transactions } = mockWallet;
-  const recent = transactions.slice(0, 4);
-
+  const { user, wallet, updateBtcRate } = useWallet();
   const { price, fresh, error } = useBtcPrice();
 
-  // Compute live balance when price is available; fall back to mock values
-  const liveBtcILS    = price ? Math.round(balance.bitcoinBTC * price.ils) : balance.bitcoinILS;
-  const liveTotalILS  = liveBtcILS + balance.stablecoinILS;
-  const liveBtcPct    = Math.round((liveBtcILS / liveTotalILS) * 100);
-  const liveStablePct = 100 - liveBtcPct;
+  // Keep wallet's stored BTC rate in sync with live price
+  useEffect(() => {
+    if (price?.ils) updateBtcRate(price.ils);
+  }, [price?.ils, updateBtcRate]);
+
+  const btcRate      = price?.ils ?? wallet?.btcRateILS ?? 56500;
+  const btcAmount    = wallet?.btcAmount    ?? 0;
+  const protectedILS = wallet?.protectedILS ?? 0;
+  const liveBtcILS   = Math.round(btcAmount * btcRate);
+  const liveTotalILS = liveBtcILS + protectedILS;
+  const liveBtcPct   = liveTotalILS > 0 ? Math.round((liveBtcILS / liveTotalILS) * 100) : 0;
+  const liveProtPct  = 100 - liveBtcPct;
+
+  const recent       = (wallet?.transactions ?? []).slice(0, 4);
+  const displayName  = user?.displayName ?? user?.username ?? '';
 
   return (
     <div className={styles.page}>
@@ -27,7 +36,7 @@ export default function DashboardPage() {
       <header className={styles.header}>
         <div className={styles.greeting}>
           <p className={styles.greetSub}>שלום,</p>
-          <p className={styles.greetName}>{user.name}</p>
+          <p className={styles.greetName}>{displayName}</p>
         </div>
         <div className={styles.menuWrap}>
           <button
@@ -65,51 +74,39 @@ export default function DashboardPage() {
       <section className={styles.balanceSection} aria-label="יתרה נוכחית">
         <div className={styles.balanceLabelRow}>
           <p className={styles.balanceLabel}>היתרה שלך</p>
-          {fresh && (
-            <span className={styles.freshBadge} aria-live="polite">עדכני ✓</span>
-          )}
-          {error && !price && (
-            <span className={styles.errorBadge}>אין חיבור</span>
-          )}
+          {fresh && <span className={styles.freshBadge} aria-live="polite">עדכני ✓</span>}
+          {error && !price && <span className={styles.errorBadge}>אין חיבור</span>}
         </div>
 
         <p className={styles.balanceAmount} aria-live="polite" dir="ltr">
           {formatILS(liveTotalILS)}
         </p>
 
-        <div
-          className={styles.changeBadge}
-          aria-label={`שינוי ${balance.change24h > 0 ? '+' : ''}${balance.change24h}% היום`}
-        >
-          <span aria-hidden="true">{balance.change24h > 0 ? '↑' : '↓'}</span>
-          <span dir="ltr">{balance.change24h > 0 ? '+' : ''}{balance.change24h}%</span>
-          <span>היום</span>
-        </div>
-
-        {/* Live BTC price line */}
         {price && (
-          <p className={styles.btcPriceLine} dir="ltr" aria-label={`מחיר ביטקוין: ${formatILS(price.ils, 0)}`}>
+          <p className={styles.btcPriceLine} dir="ltr">
             1 BTC = {formatILS(price.ils, 0)}
             <span className={styles.btcUsd}> · ${price.usd.toLocaleString()}</span>
           </p>
         )}
 
-        {/* Split pills */}
-        <div className={styles.splitRow} role="list" aria-label="הרכב הסכום">
-          <div className={styles.pill} role="listitem">
-            <span className={styles.pillDot} style={{ background: 'var(--w-accent)' }} aria-hidden="true"/>
-            <span className={styles.pillLabel}>Bitcoin</span>
-            <span className={styles.pillAmount} dir="ltr">{formatILS(liveBtcILS, 0)}</span>
-            <span className={styles.pillPct} dir="ltr">{liveBtcPct}%</span>
+        {/* Split pills — only show when there is a balance */}
+        {liveTotalILS > 0 && (
+          <div className={styles.splitRow} role="list" aria-label="הרכב הסכום">
+            <div className={styles.pill} role="listitem">
+              <span className={styles.pillDot} style={{ background: 'var(--w-accent)' }} aria-hidden="true"/>
+              <span className={styles.pillLabel}>Bitcoin</span>
+              <span className={styles.pillAmount} dir="ltr">{formatILS(liveBtcILS, 0)}</span>
+              <span className={styles.pillPct} dir="ltr">{liveBtcPct}%</span>
+            </div>
+            <div className={styles.pillDivider} aria-hidden="true"/>
+            <div className={styles.pill} role="listitem">
+              <span className={styles.pillDot} style={{ background: 'var(--w-text-muted)' }} aria-hidden="true"/>
+              <span className={styles.pillLabel}>מוגן</span>
+              <span className={styles.pillAmount} dir="ltr">{formatILS(protectedILS, 0)}</span>
+              <span className={styles.pillPct} dir="ltr">{liveProtPct}%</span>
+            </div>
           </div>
-          <div className={styles.pillDivider} aria-hidden="true"/>
-          <div className={styles.pill} role="listitem">
-            <span className={styles.pillDot} style={{ background: 'var(--w-text-muted)' }} aria-hidden="true"/>
-            <span className={styles.pillLabel}>מוגן</span>
-            <span className={styles.pillAmount} dir="ltr">{formatILS(balance.stablecoinILS, 0)}</span>
-            <span className={styles.pillPct} dir="ltr">{liveStablePct}%</span>
-          </div>
-        </div>
+        )}
       </section>
 
       {/* Actions */}
@@ -157,31 +154,41 @@ export default function DashboardPage() {
       <section className={styles.activity}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>פעילות אחרונה</h2>
-          <button className={styles.seeAllBtn} onClick={() => navigate('/history')}>
-            ראה הכל
-          </button>
+          {recent.length > 0 && (
+            <button className={styles.seeAllBtn} onClick={() => navigate('/history')}>
+              ראה הכל
+            </button>
+          )}
         </div>
 
-        <div className={styles.txList} role="list">
-          {recent.map((tx) => (
-            <button key={tx.id} className={styles.txRow} role="listitem"
-              onClick={() => navigate('/history')}
-              aria-label={`${tx.description}, ${tx.type === 'receive' ? '+' : '-'}${formatILS(tx.amountILS)}, ${tx.date}`}>
-              <span className={`${styles.txIcon} ${tx.type === 'receive' ? styles.txIconReceive : styles.txIconSend}`}
-                aria-hidden="true">
-                {tx.type === 'receive' ? '↓' : '↑'}
-              </span>
-              <span className={styles.txMeta}>
-                <span className={styles.txDesc}>{tx.description}</span>
-                <span className={styles.txDate}>{tx.date}</span>
-              </span>
-              <span className={`${styles.txAmount} ${tx.type === 'receive' ? styles.txAmountReceive : styles.txAmountSend}`}
-                dir="ltr">
-                {tx.type === 'receive' ? '+' : '−'}{formatILS(tx.amountILS, 0)}
-              </span>
-            </button>
-          ))}
-        </div>
+        {recent.length === 0 ? (
+          <div className={styles.emptyState}>
+            <p className={styles.emptyIcon} aria-hidden="true">💸</p>
+            <p className={styles.emptyText}>אין עדיין פעילות</p>
+            <p className={styles.emptySub}>הפקד כסף כדי להתחיל</p>
+          </div>
+        ) : (
+          <div className={styles.txList} role="list">
+            {recent.map((tx) => (
+              <button key={tx.id} className={styles.txRow} role="listitem"
+                onClick={() => navigate('/history')}
+                aria-label={`${tx.description}, ${tx.type === 'receive' ? '+' : '-'}${formatILS(tx.amountILS)}, ${tx.date}`}>
+                <span className={`${styles.txIcon} ${tx.type === 'receive' ? styles.txIconReceive : styles.txIconSend}`}
+                  aria-hidden="true">
+                  {tx.type === 'receive' ? '↓' : '↑'}
+                </span>
+                <span className={styles.txMeta}>
+                  <span className={styles.txDesc}>{tx.description}</span>
+                  <span className={styles.txDate}>{tx.date}</span>
+                </span>
+                <span className={`${styles.txAmount} ${tx.type === 'receive' ? styles.txAmountReceive : styles.txAmountSend}`}
+                  dir="ltr">
+                  {tx.type === 'receive' ? '+' : '−'}{formatILS(tx.amountILS, 0)}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

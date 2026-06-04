@@ -24,7 +24,7 @@ function Welcome({ onNext }) {
       <ul className={styles.benefits} aria-label="יתרונות">
         {[
           { icon: '🏦', title: 'בלי בנק', desc: 'הכסף שלך בידיים שלך. אף אחד לא יכול לקפוא לך את החשבון.' },
-          { icon: '⚡', title: 'עמלות אפסיות', desc: '₪0.02 במקום ₪3.50. חסוך 99% מהעמלות.' },
+          { icon: '⚡', title: 'עמלות אפסיות', desc: 'שלח כסף ב-Bitcoin — עמלות אפסיות ⚡' },
           { icon: '🛡️', title: 'מוגן אוטומטית', desc: 'הטכנולוגיה שומרת על הקרן שלך אפילו כשהשוק יורד.' },
         ].map((b) => (
           <li key={b.title} className={styles.benefit}>

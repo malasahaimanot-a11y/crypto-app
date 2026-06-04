@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockWallet, formatILS } from '../../data/mockWalletData.js';
+import { formatILS } from '../../data/mockWalletData.js';
+import { useWallet } from '../../contexts/WalletContext.jsx';
 import PageDecor from '../../components/wallet/PageDecor.jsx';
 import styles from './HistoryPage.module.css';
 
@@ -105,18 +106,12 @@ function TxRow({ tx }) {
 export default function HistoryPage() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
+  const { wallet } = useWallet();
 
-  const filtered = mockWallet.transactions.filter((tx) =>
-    filter === 'all' || tx.type === filter
-  );
-
-  const totalReceived = mockWallet.transactions
-    .filter((t) => t.type === 'receive')
-    .reduce((s, t) => s + t.amountILS, 0);
-
-  const totalSent = mockWallet.transactions
-    .filter((t) => t.type === 'send')
-    .reduce((s, t) => s + t.amountILS, 0);
+  const transactions  = wallet?.transactions ?? [];
+  const filtered      = transactions.filter((tx) => filter === 'all' || tx.type === filter);
+  const totalReceived = transactions.filter((t) => t.type === 'receive').reduce((s, t) => s + t.amountILS, 0);
+  const totalSent     = transactions.filter((t) => t.type === 'send').reduce((s, t) => s + t.amountILS, 0);
 
   return (
     <div className={styles.page}>
@@ -160,10 +155,8 @@ export default function HistoryPage() {
             aria-pressed={filter === f.id}
           >
             {f.label}
-            <span className={styles.filterCount} aria-label={`${mockWallet.transactions.filter(t => f.id === 'all' || t.type === f.id).length} עסקאות`}>
-              {f.id === 'all'
-                ? mockWallet.transactions.length
-                : mockWallet.transactions.filter((t) => t.type === f.id).length}
+            <span className={styles.filterCount}>
+              {f.id === 'all' ? transactions.length : transactions.filter((t) => t.type === f.id).length}
             </span>
           </button>
         ))}

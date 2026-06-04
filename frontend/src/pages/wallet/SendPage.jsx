@@ -1,39 +1,44 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockWallet, formatILS } from '../../data/mockWalletData.js';
+import { useWallet } from '../../contexts/WalletContext.jsx';
 import styles from './SendPage.module.css';
 
 const KEYS = ['1','2','3','4','5','6','7','8','9','.','0','⌫'];
 
 export default function SendPage() {
   const navigate = useNavigate();
-  const [amount, setAmount] = useState('');
-  const [recipient, setRecipient] = useState(null);
-  const [tab, setTab] = useState('contacts'); // contacts | lightning | qr
-  const [note, setNote] = useState('');
+  const { wallet, sendPayment } = useWallet();
+  const [amount, setAmount]           = useState('');
+  const [recipient, setRecipient]     = useState(null);
+  const [tab, setTab]                 = useState('contacts');
+  const [note, setNote]               = useState('');
   const [lightningAddr, setLightningAddr] = useState('');
-  const [sent, setSent] = useState(false);
+  const [sent, setSent]               = useState(false);
+  const [error, setError]             = useState('');
 
   const displayAmount = amount === '' ? '0' : amount;
-  const amountNum = parseFloat(amount) || 0;
-  const canSend = amountNum > 0 && (recipient || lightningAddr.includes('@'));
+  const amountNum     = parseFloat(amount) || 0;
+  const balance       = wallet?.totalILS ?? 0;
+  const recipientName = recipient?.name || lightningAddr;
+  const canSend       = amountNum > 0 && amountNum <= balance && (recipient || lightningAddr.includes('@'));
 
   function handleKey(k) {
-    if (k === '⌫') {
-      setAmount(a => a.slice(0, -1));
-      return;
-    }
+    if (k === '⌫') { setAmount(a => a.slice(0, -1)); setError(''); return; }
     if (k === '.' && amount.includes('.')) return;
     if (k === '.' && amount === '') { setAmount('0.'); return; }
-    const next = amount + k;
+    const next  = amount + k;
     const parts = next.split('.');
     if (parts[1] && parts[1].length > 2) return;
     if (parts[0].length > 6) return;
     setAmount(next);
+    setError('');
   }
 
   function handleSend() {
     if (!canSend) return;
+    if (amountNum > balance) { setError('אין מספיק יתרה'); return; }
+    sendPayment(amountNum, recipientName, note);
     setSent(true);
     setTimeout(() => navigate('/'), 2200);
   }
@@ -45,7 +50,7 @@ export default function SendPage() {
         <div className={styles.successIcon} aria-hidden="true">✓</div>
         <p className={styles.successTitle}>הכסף נשלח!</p>
         <p className={styles.successSub}>
-          {formatILS(amountNum)} אל {recipient?.name || lightningAddr}
+          {formatILS(amountNum)} אל {recipientName}
         </p>
       </div>
     );
@@ -65,6 +70,11 @@ export default function SendPage() {
         <div style={{ width: 44 }}/>
       </header>
 
+      {/* Balance hint */}
+      <p className={styles.balanceHint}>
+        יתרה זמינה: <span dir="ltr">{formatILS(balance, 0)}</span>
+      </p>
+
       {/* Amount display */}
       <div className={styles.amountArea} aria-live="polite" aria-label={`סכום: ${formatILS(amountNum)}`}>
         <span className={styles.currency} aria-hidden="true">₪</span>
@@ -74,12 +84,15 @@ export default function SendPage() {
         <span className={`${styles.cursor} wCursorBlink`} aria-hidden="true">|</span>
       </div>
 
-      {/* Fee badge */}
-      {amountNum > 0 && (
+      {/* Fee / error badge */}
+      {amountNum > 0 && !error && (
         <div className={styles.feeBadge} role="status">
           <span aria-hidden="true">⚡</span>
-          <span>עמלה: אפסית ⚡</span>
+          <span>עמלות אפסיות ⚡</span>
         </div>
+      )}
+      {error && (
+        <div className={styles.errorBadge} role="alert">{error}</div>
       )}
 
       {/* Number pad */}
@@ -113,13 +126,9 @@ export default function SendPage() {
             { id: 'lightning', label: 'כתובת Lightning' },
             { id: 'qr', label: 'סרוק QR' },
           ].map((t) => (
-            <button
-              key={t.id}
-              role="tab"
-              aria-selected={tab === t.id}
+            <button key={t.id} role="tab" aria-selected={tab === t.id}
               className={`${styles.tab} ${tab === t.id ? styles.tabActive : ''}`}
-              onClick={() => setTab(t.id)}
-            >
+              onClick={() => setTab(t.id)}>
               {t.label}
             </button>
           ))}
@@ -128,27 +137,19 @@ export default function SendPage() {
         {tab === 'contacts' && (
           <div className={styles.contactList} role="tabpanel" aria-label="אנשי קשר">
             {mockWallet.contacts.map((c) => (
-              <button
-                key={c.id}
+              <button key={c.id}
                 className={`${styles.contactRow} ${recipient?.id === c.id ? styles.contactSelected : ''}`}
                 onClick={() => setRecipient(recipient?.id === c.id ? null : c)}
                 aria-pressed={recipient?.id === c.id}
-                aria-label={`שלח ל${c.name}`}
-              >
-                <span
-                  className={styles.avatar}
-                  style={{ background: c.color }}
-                  aria-hidden="true"
-                >
+                aria-label={`שלח ל${c.name}`}>
+                <span className={styles.avatar} style={{ background: c.color }} aria-hidden="true">
                   {c.initials}
                 </span>
                 <span className={styles.contactMeta}>
                   <span className={styles.contactName}>{c.name}</span>
                   <span className={styles.contactAddr}>{c.address}</span>
                 </span>
-                {recipient?.id === c.id && (
-                  <span className={styles.checkIcon} aria-hidden="true">✓</span>
-                )}
+                {recipient?.id === c.id && <span className={styles.checkIcon} aria-hidden="true">✓</span>}
               </button>
             ))}
           </div>
@@ -156,15 +157,11 @@ export default function SendPage() {
 
         {tab === 'lightning' && (
           <div className={styles.inputWrap} role="tabpanel" aria-label="כתובת Lightning">
-            <input
-              type="text"
-              className={styles.addrInput}
+            <input type="text" className={styles.addrInput}
               placeholder="user@domain.com"
               value={lightningAddr}
               onChange={(e) => setLightningAddr(e.target.value)}
-              dir="ltr"
-              aria-label="כתובת Lightning"
-            />
+              dir="ltr" aria-label="כתובת Lightning"/>
           </div>
         )}
 
@@ -180,24 +177,18 @@ export default function SendPage() {
               </svg>
             </div>
             <p className={styles.qrText}>הפנה את המצלמה לקוד QR</p>
-            <button className={styles.qrOpenBtn} aria-label="פתח מצלמה (סימולציה)">
-              פתח מצלמה
-            </button>
           </div>
         )}
       </div>
 
       {/* Optional note */}
       <div className={styles.noteWrap}>
-        <input
-          type="text"
-          className={styles.noteInput}
+        <input type="text" className={styles.noteInput}
           placeholder="הוסף הערה (אופציונלי)"
           value={note}
           onChange={(e) => setNote(e.target.value)}
           maxLength={60}
-          aria-label="הערה לתשלום"
-        />
+          aria-label="הערה לתשלום"/>
       </div>
 
       {/* Send button */}
@@ -206,11 +197,8 @@ export default function SendPage() {
           className={`${styles.sendBtn} ${!canSend ? styles.sendBtnDisabled : ''}`}
           onClick={handleSend}
           disabled={!canSend}
-          aria-disabled={!canSend}
-        >
-          {canSend
-            ? `שלח ${formatILS(amountNum)}`
-            : 'הזן סכום ונמען'}
+          aria-disabled={!canSend}>
+          {canSend ? `שלח ${formatILS(amountNum)}` : 'הזן סכום ונמען'}
         </button>
       </div>
     </div>

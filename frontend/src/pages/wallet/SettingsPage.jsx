@@ -85,7 +85,7 @@ export default function SettingsPage() {
   const [wordsVisible, setWordsVisible] = useState(false);
   const [logoutConfirm, setLogoutConfirm] = useState(false);
 
-  const recoveryWords = [
+  const recoveryWords = user?.recoveryWords ?? [
     'תפוח', 'שמש', 'ים', 'הר', 'כוכב', 'ירח',
     'עץ', 'ענן', 'נהר', 'אבן', 'רוח', 'אש',
   ];
