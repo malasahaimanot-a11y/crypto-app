@@ -10,27 +10,34 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 20px 8px;
+  padding: 20px 16px 16px;
+  background: #1C1C1E;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
   flex-shrink: 0;
 }
 
 .backBtn {
   width: 44px; height: 44px;
   border-radius: 50%;
-  border: none;
-  background: var(--w-surface);
-  color: var(--w-text);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #FFFFFF;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   transition: background var(--w-transition);
   flex-shrink: 0;
 }
-.backBtn:hover { background: var(--w-surface-2); }
+.backBtn:hover { background: rgba(255,255,255,0.16); }
 .backBtn:focus-visible { outline: 3px solid var(--w-accent); outline-offset: 2px; }
 
 .title {
   font-size: 1.05rem;
   font-weight: 700;
+  color: #FFFFFF;
   color: var(--w-text);
 }
 

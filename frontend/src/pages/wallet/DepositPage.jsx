@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockWallet, formatILS } from '../../data/mockWalletData.js';
+import { formatILS } from '../../data/mockWalletData.js';
+import { PROTECTION_LEVELS } from '../../services/storage.js';
 import { useWallet } from '../../contexts/WalletContext.jsx';
 import styles from './DepositPage.module.css';
 
@@ -19,12 +20,9 @@ export default function DepositPage() {
   const [method, setMethod] = useState(null);
 
   const amountNum    = parseFloat(amount) || 0;
-  // Use wallet's current protection level (fallback to balanced = index 1)
   const protLevel    = wallet?.protection?.level ?? 1;
-  const level        = mockWallet.protection.levels[protLevel];
-  const btcFrac      = (100 - level.protectedPct) / 100;
-  const protFrac     = level.protectedPct / 100;
-  const btcILS       = Math.round(amountNum * btcFrac);
+  const level        = PROTECTION_LEVELS[protLevel] ?? PROTECTION_LEVELS[1];
+  const btcILS       = Math.round(amountNum * (level.btcPct / 100));
   const protILS      = amountNum - btcILS;
   const methodLabel  = METHODS.find(m => m.id === method)?.title ?? '';
 

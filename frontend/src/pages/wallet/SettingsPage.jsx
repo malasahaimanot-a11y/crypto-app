@@ -47,7 +47,7 @@ function CopyField({ label, value }) {
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
-    navigator.clipboard.writeText(value).then(() => {
+    navigator.clipboard?.writeText(value).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -61,8 +61,7 @@ function CopyField({ label, value }) {
         <button
           className={`${styles.copyBtn} ${copied ? styles.copyBtnDone : ''}`}
           onClick={handleCopy}
-          aria-label={copied ? 'הועתק' : `העתק ${label}`}
-        >
+          aria-label={copied ? 'הועתק' : `העתק ${label}`}>
           {copied ? <CheckIcon /> : <CopyIcon />}
         </button>
       </div>
@@ -82,13 +81,11 @@ function SectionCard({ title, children }) {
 export default function SettingsPage() {
   const navigate = useNavigate();
   const { user, signOut } = useWallet();
-  const [wordsVisible, setWordsVisible] = useState(false);
-  const [logoutConfirm, setLogoutConfirm] = useState(false);
+  const [wordsVisible,    setWordsVisible]    = useState(false);
+  const [wordsBlurred,    setWordsBlurred]    = useState(true);
+  const [logoutConfirm,   setLogoutConfirm]   = useState(false);
 
-  const recoveryWords = user?.recoveryWords ?? [
-    'תפוח', 'שמש', 'ים', 'הר', 'כוכב', 'ירח',
-    'עץ', 'ענן', 'נהר', 'אבן', 'רוח', 'אש',
-  ];
+  const recoveryWords = user?.recoveryWords ?? [];
 
   function handleLogout() {
     if (!logoutConfirm) {
@@ -114,71 +111,83 @@ export default function SettingsPage() {
       </header>
 
       <div className={styles.content}>
-        {/* Account info */}
-        <SectionCard title="פרטי חשבון">
+
+        {/* ── Personal Details ── */}
+        <SectionCard title="פרטים אישיים">
           <div className={styles.avatarRow}>
             <div className={styles.avatar} aria-hidden="true">
-              {user?.displayName?.[0]?.toUpperCase() ?? '?'}
+              {user?.name?.[0]?.toUpperCase() ?? '?'}
             </div>
             <div>
-              <p className={styles.displayName}>{user?.displayName ?? '—'}</p>
-              <p className={styles.username}>@{user?.username ?? '—'}</p>
+              <p className={styles.displayName}>{user?.name ?? '—'}</p>
+              <p className={styles.userEmail}>{user?.email ?? '—'}</p>
+            </div>
+          </div>
+
+          <div className={styles.infoRows}>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>רמת הגנה</span>
+              <span className={styles.infoValue}>{user?.protectionLevel ?? '—'}</span>
             </div>
           </div>
 
           <div className={styles.fields}>
             <CopyField label="כתובת Lightning" value={user?.lightningAddress ?? '—'} />
-            <CopyField label="כתובת Bitcoin" value={user?.mockAddress ?? '—'} />
+            <CopyField label="כתובת Bitcoin"   value={user?.mockAddress      ?? '—'} />
           </div>
         </SectionCard>
 
-        {/* Recovery words */}
-        <SectionCard title="מילות שחזור">
+        {/* ── Recovery Words ── */}
+        <SectionCard title="מילות גיבוי">
           <p className={styles.sectionHint}>
             שמור את 12 המילות האלה במקום בטוח. הן מאפשרות שחזור הארנק.
           </p>
           <button
             className={styles.revealBtn}
             onClick={() => setWordsVisible(v => !v)}
-            aria-expanded={wordsVisible}
-          >
-            <span>{wordsVisible ? 'הסתר מילות שחזור' : 'הצג מילות שחזור'}</span>
+            aria-expanded={wordsVisible}>
+            <span>{wordsVisible ? 'הסתר מילות גיבוי' : 'הצג מילות גיבוי'}</span>
             <ChevronIcon open={wordsVisible} />
           </button>
 
           {wordsVisible && (
-            <div className={`${styles.wordGrid} wStepIn`} aria-label="מילות שחזור">
+            <div className={`${styles.wordGrid} wStepIn`}
+              style={{ filter: wordsBlurred ? 'blur(6px)' : 'none', cursor: wordsBlurred ? 'pointer' : 'auto' }}
+              onClick={() => wordsBlurred && setWordsBlurred(false)}
+              role="group"
+              aria-label={wordsBlurred ? 'לחץ לחשיפת מילות הגיבוי' : 'מילות גיבוי'}>
               {recoveryWords.map((word, i) => (
                 <div key={i} className={styles.wordCell}>
                   <span className={styles.wordNum}>{i + 1}</span>
-                  <span className={styles.wordText}>{word}</span>
+                  <span className={styles.wordText} dir="ltr">{word}</span>
                 </div>
               ))}
+              {wordsBlurred && (
+                <div className={styles.blurHint}>לחץ לחשיפה</div>
+              )}
             </div>
           )}
         </SectionCard>
 
-        {/* Security */}
+        {/* ── Security ── */}
         <SectionCard title="אבטחה">
           <div className={styles.securityRows}>
-            <div className={styles.securityRow}>
-              <div>
-                <p className={styles.securityLabel}>נעילה ביומטרית</p>
-                <p className={styles.securityDesc}>כניסה עם טביעת אצבע או פנים</p>
+            {[
+              { label: 'נעילה ביומטרית',   desc: 'כניסה עם טביעת אצבע או פנים' },
+              { label: 'אימות דו-שלבי',   desc: 'הגנה נוספת לחשבון שלך'        },
+            ].map(r => (
+              <div key={r.label} className={styles.securityRow}>
+                <div>
+                  <p className={styles.securityLabel}>{r.label}</p>
+                  <p className={styles.securityDesc}>{r.desc}</p>
+                </div>
+                <div className={styles.badge}>בקרוב</div>
               </div>
-              <div className={styles.badge}>בקרוב</div>
-            </div>
-            <div className={styles.securityRow}>
-              <div>
-                <p className={styles.securityLabel}>אימות דו-שלבי</p>
-                <p className={styles.securityDesc}>הגנה נוספת לחשבון שלך</p>
-              </div>
-              <div className={styles.badge}>בקרוב</div>
-            </div>
+            ))}
           </div>
         </SectionCard>
 
-        {/* App info */}
+        {/* ── About ── */}
         <SectionCard title="אודות">
           <div className={styles.infoRows}>
             <div className={styles.infoRow}>
@@ -189,14 +198,17 @@ export default function SettingsPage() {
               <span className={styles.infoLabel}>רשת</span>
               <span className={styles.infoValue} dir="ltr">Bitcoin Mainnet</span>
             </div>
+            <div className={styles.infoRow}>
+              <span className={styles.infoLabel}>אפליקציה</span>
+              <span className={styles.infoValue}>PassIT</span>
+            </div>
           </div>
         </SectionCard>
 
         {/* Logout */}
         <button
           className={`${styles.logoutBtn} ${logoutConfirm ? styles.logoutConfirm : ''}`}
-          onClick={handleLogout}
-        >
+          onClick={handleLogout}>
           {logoutConfirm ? 'לחץ שוב לאישור יציאה' : 'יציאה מהחשבון'}
         </button>
       </div>
