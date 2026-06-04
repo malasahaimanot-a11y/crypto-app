@@ -20,9 +20,9 @@ export default function Layout({ children }) {
 
       <div className={styles.shell}>
         <header className={styles.header} role="banner">
-          <div className={styles.logo} aria-label="CryptoVault">
+          <div className={styles.logo} aria-label="PassIT">
             <span className={styles.logoIcon} aria-hidden="true">🔐</span>
-            <span className={styles.logoText}>CryptoVault</span>
+            <span className={styles.logoText}>PassIT</span>
           </div>
 
           <nav className={styles.nav} aria-label={isHe ? 'ניווט ראשי' : 'Main navigation'}>

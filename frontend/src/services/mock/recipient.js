@@ -25,9 +25,9 @@ export function displayRecipient(input) {
 
 // Mock app contacts (in production: fetched from contact server)
 export const APP_CONTACTS = [
-  { id: 1, name: 'שרה כהן',    address: 'sarah@satoshipay.co',  initials: 'שכ', color: '#DBEAFE' },
-  { id: 2, name: 'דוד לוי',    address: 'david@satoshipay.co',  initials: 'דל', color: '#DCFCE7' },
-  { id: 3, name: 'מרים אברהם', address: 'miriam@satoshipay.co', initials: 'מא', color: '#FEF3C7' },
+  { id: 1, name: 'שרה כהן',    address: 'sarah@passitpay.co',  initials: 'שכ', color: '#DBEAFE' },
+  { id: 2, name: 'דוד לוי',    address: 'david@passitpay.co',  initials: 'דל', color: '#DCFCE7' },
+  { id: 3, name: 'מרים אברהם', address: 'miriam@passitpay.co', initials: 'מא', color: '#FEF3C7' },
 ];
 
 export const TYPE_LABELS = {
