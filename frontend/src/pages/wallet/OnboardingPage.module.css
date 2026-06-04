@@ -168,9 +168,14 @@
 
 .protCardSelected {
   border-color: var(--w-accent);
-  background: var(--w-accent-light);
-  box-shadow: 0 0 0 1px var(--w-accent);
+  background: #1C1C1E;
+  box-shadow: 0 0 0 2px var(--w-accent), 0 6px 20px rgba(232,146,10,0.22);
 }
+
+/* Text overrides when card is dark */
+.protCardSelected .protLabel { color: #FFFFFF; }
+.protCardSelected .protSub   { color: rgba(255,255,255,0.80); }
+.protCardSelected .protDesc  { color: rgba(255,255,255,0.55); }
 
 .protRecommended {
   position: absolute;

@@ -199,8 +199,16 @@
 .levelLabel:focus-visible { outline: 3px solid var(--w-blue); outline-offset: 2px; }
 
 .levelLabelActive {
-  color: var(--w-navy) !important;
-  background: var(--w-blue-light) !important;
+  color: #FFFFFF !important;
+  background: #1C1C1E !important;
+  border-color: var(--w-accent) !important;
+}
+
+.levelLabelText {
+  font-size: inherit;
+  word-break: keep-all;
+  hyphens: auto;
+  text-align: center;
 }
 
 .levelPct {
@@ -292,11 +300,33 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Save button ────────────────────────────────────────── */
+/* ── Save area (auto-save — no button needed) ───────────── */
 .saveWrap {
-  padding: 4px 16px 16px;
+  padding: 8px 16px 20px;
+  display: flex;
+  justify-content: center;
 }
 
+.savedConfirm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--w-green);
+  background: var(--w-green-light);
+  padding: 8px 20px;
+  border-radius: var(--w-radius-pill);
+  animation: wFadeSlide 200ms ease both;
+}
+
+.saveHint {
+  font-size: 0.8rem;
+  color: var(--w-text-muted);
+  text-align: center;
+}
+
+/* ── (legacy save button — kept for reference) ─────────── */
 .saveBtn {
   display: flex;
   align-items: center;

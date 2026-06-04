@@ -17,6 +17,7 @@ export function signup(name, email, password, protectionLevel) {
     protectionLevel,
   });
   storage.saveUser(user);
+  storage.initWallet(user.protectionLevelIndex); // seed wallet with chosen level
   storage.saveSession(user.email);
   return user;
 }

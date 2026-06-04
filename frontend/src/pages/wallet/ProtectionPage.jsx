@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatILS } from '../../data/mockWalletData.js';
 import { PROTECTION_LEVELS } from '../../services/storage.js';
@@ -9,18 +9,38 @@ export default function ProtectionPage() {
   const navigate = useNavigate();
   const { wallet, updateProtectionLevel } = useWallet();
 
-  const balance    = wallet?.totalILS ?? 0;
-  const savedLevel = wallet?.protection?.level ?? 1;
-  const [level,  setLevel]  = useState(savedLevel);
+  const balance = wallet?.totalILS ?? 0;
+
+  // Local display state — always controlled by the slider/cards
+  const [level,  setLevel]  = useState(wallet?.protection?.level ?? 1);
   const [saved,  setSaved]  = useState(false);
+  const [saveTimer, setSaveTimer] = useState(null);
+
+  // BUG FIX: sync once when wallet first loads from localStorage
+  // (wallet is null on first render, then resolves via useEffect in WalletContext)
+  useEffect(() => {
+    if (wallet?.protection?.level !== undefined) {
+      setLevel(wallet.protection.level);
+    }
+  }, [wallet?.protection?.level]);
 
   const current      = PROTECTION_LEVELS[level] ?? PROTECTION_LEVELS[1];
   const protectedAmt = balance * (current.protectedPct / 100);
   const btcAmt       = balance * (current.btcPct / 100);
 
-  function handleSave() {
-    updateProtectionLevel(current.id);
-    setSaved(true);
+  // Auto-save immediately on any level change
+  function handleLevelChange(newIdx) {
+    if (newIdx === level) return;
+    setLevel(newIdx);
+    setSaved(false);
+
+    const lvl = PROTECTION_LEVELS[newIdx];
+    if (lvl) updateProtectionLevel(lvl.id);
+
+    // Show "נשמר" confirmation briefly
+    if (saveTimer) clearTimeout(saveTimer);
+    const t = setTimeout(() => setSaved(true), 80); // tiny delay so state is committed
+    setSaveTimer(t);
     setTimeout(() => setSaved(false), 2000);
   }
 
@@ -37,13 +57,14 @@ export default function ProtectionPage() {
         <div style={{ width: 44 }}/>
       </header>
 
-      {/* Status card */}
+      {/* ── Status card ── */}
       <div className={styles.statusCard} role="region" aria-label="סטטוס הגנה נוכחי">
         <p className={styles.statusQuestion}>כמה מהכסף שלך מוגן עכשיו?</p>
 
         <div className={styles.progressRow} aria-hidden="true">
           <div className={styles.progressBar}>
-            <div className={styles.progressFill} style={{ width: `${current.protectedPct}%` }}/>
+            <div className={styles.progressFill}
+              style={{ width: `${current.protectedPct}%`, transition: 'width 300ms ease' }}/>
           </div>
           <span className={styles.progressPct} dir="ltr">{current.protectedPct}%</span>
         </div>
@@ -55,7 +76,7 @@ export default function ProtectionPage() {
         </p>
       </div>
 
-      {/* Breakdown */}
+      {/* ── Split breakdown ── */}
       <div className={styles.explainer}>
         <div className={styles.explainerRow}>
           <span className={styles.explainerDot} style={{ background: '#60A5FA' }} aria-hidden="true"/>
@@ -69,10 +90,10 @@ export default function ProtectionPage() {
         </div>
       </div>
 
-      {/* Slider */}
+      {/* ── Slider ── */}
       <div className={styles.sliderSection}>
         <div className={styles.sliderHeader}>
-          <p className={styles.sliderTitle}>שנה רמת הגנה</p>
+          <p className={styles.sliderTitle}>בחר רמת הגנה</p>
           <span className={styles.riskBadge}
             style={{ color: current.riskColor, background: current.riskColor + '18' }}
             aria-live="polite">
@@ -83,21 +104,21 @@ export default function ProtectionPage() {
         <div className={styles.sliderWrap} dir="ltr">
           <input type="range" min="0" max="3" step="1"
             value={level}
-            onChange={e => { setLevel(Number(e.target.value)); setSaved(false); }}
+            onChange={e => handleLevelChange(Number(e.target.value))}
             className="wSlider"
             aria-label="רמת הגנה"
             aria-valuetext={current.label}
             style={{
-              background: `linear-gradient(to right, #E8920A 0%, #E8920A ${(level / 3) * 100}%, #252525 ${(level / 3) * 100}%, #252525 100%)`
+              background: `linear-gradient(to right, #E8920A 0%, #E8920A ${(level / 3) * 100}%, #E5E7EB ${(level / 3) * 100}%, #E5E7EB 100%)`
             }}
           />
           <div className={styles.sliderLabels}>
             {PROTECTION_LEVELS.map((l, i) => (
               <button key={l.id}
                 className={`${styles.levelLabel} ${i === level ? styles.levelLabelActive : ''}`}
-                onClick={() => { setLevel(i); setSaved(false); }}
+                onClick={() => handleLevelChange(i)}
                 aria-pressed={i === level}>
-                {l.label}
+                <span className={styles.levelLabelText}>{l.label}</span>
                 <span className={styles.levelPct} dir="ltr">{l.protectedPct}%</span>
               </button>
             ))}
@@ -105,7 +126,7 @@ export default function ProtectionPage() {
         </div>
       </div>
 
-      {/* Level detail card */}
+      {/* ── Active level detail card ── */}
       <div className={styles.levelCard} aria-live="polite">
         <div className={styles.levelCardHeader}>
           <span className={styles.levelIcon} aria-hidden="true">{current.icon}</span>
@@ -117,13 +138,14 @@ export default function ProtectionPage() {
 
         <div className={styles.levelCardBars}>
           {[
-            { label: 'מוגן',   pct: current.protectedPct, cls: styles.levelBarProtected },
-            { label: 'Bitcoin', pct: current.btcPct,       cls: styles.levelBarBtc },
+            { label: 'מוגן',    pct: current.protectedPct, cls: styles.levelBarProtected },
+            { label: 'Bitcoin', pct: current.btcPct,        cls: styles.levelBarBtc },
           ].map(b => (
             <div key={b.label} className={styles.levelBarRow}>
               <span className={styles.levelBarLabel}>{b.label}</span>
               <div className={styles.levelBarTrack}>
-                <div className={`${styles.levelBarFill} ${b.cls}`} style={{ width: `${b.pct}%` }}/>
+                <div className={`${styles.levelBarFill} ${b.cls}`}
+                  style={{ width: `${b.pct}%`, transition: 'width 300ms ease' }}/>
               </div>
               <span className={styles.levelBarPct} dir="ltr">{b.pct}%</span>
             </div>
@@ -131,14 +153,15 @@ export default function ProtectionPage() {
         </div>
       </div>
 
-      {/* Save button */}
+      {/* ── Save confirmation (auto-saves, button just shows status) ── */}
       <div className={styles.saveWrap}>
-        <button
-          className={`${styles.saveBtn} ${saved ? styles.saveBtnSuccess : ''}`}
-          onClick={handleSave}
-          aria-label={saved ? 'הגדרות נשמרו' : 'שמור הגדרות הגנה'}>
-          {saved ? <><span aria-hidden="true">✓</span> נשמר בהצלחה</> : 'שמור הגדרות'}
-        </button>
+        {saved ? (
+          <div className={styles.savedConfirm} role="status" aria-live="polite">
+            <span aria-hidden="true">✓</span> נשמר בהצלחה
+          </div>
+        ) : (
+          <p className={styles.saveHint}>השינויים נשמרים אוטומטית</p>
+        )}
       </div>
     </div>
   );

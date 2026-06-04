@@ -123,6 +123,18 @@ export function getStoredWallet() {
 }
 export function saveWallet(wallet) { set(KEYS.WALLET, wallet); }
 
+/**
+ * Create and persist a fresh zero-balance wallet for a new user,
+ * seeded with their chosen protection level index so the first
+ * deposit splits correctly.
+ */
+export function initWallet(protectionLevelIndex) {
+  const level  = protectionLevelIndex ?? 1;
+  const wallet = { ...EMPTY_WALLET, protection: { isActive: true, level } };
+  saveWallet(wallet);
+  return wallet;
+}
+
 // ── Reset ──────────────────────────────────────────────────
 export function resetAll() {
   Object.values(KEYS).forEach(k => localStorage.removeItem(k));
