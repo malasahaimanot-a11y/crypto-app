@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockWallet, formatILS } from '../../data/mockWalletData.js';
+import PageDecor from '../../components/wallet/PageDecor.jsx';
 import styles from './HistoryPage.module.css';
 
 const FILTERS = [
@@ -119,6 +120,8 @@ export default function HistoryPage() {
 
   return (
     <div className={styles.page}>
+      <PageDecor />
+
       {/* Header */}
       <header className={styles.header}>
         <button className={styles.backBtn} onClick={() => navigate('/')} aria-label="חזור">

@@ -3,6 +3,8 @@
   background: var(--w-bg);
   display: flex;
   flex-direction: column;
+  position: relative;
+  isolation: isolate;
 }
 
 /* ── Header ─────────────────────────────────────────────── */
@@ -10,30 +12,35 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 16px 8px;
+  padding: 20px 16px 16px;
+  background: #1C1C1E;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .backBtn {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--w-surface);
-  border: 1px solid var(--w-border);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--w-text);
+  color: #FFFFFF;
   cursor: pointer;
   transition: background var(--w-transition);
-  box-shadow: var(--w-shadow);
 }
-.backBtn:hover { background: var(--w-blue-light); color: var(--w-navy); }
-.backBtn:focus-visible { outline: 3px solid var(--w-navy); outline-offset: 2px; }
+.backBtn:hover { background: rgba(255,255,255,0.16); }
+.backBtn:focus-visible { outline: 3px solid var(--w-accent); outline-offset: 2px; }
 
 .title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--w-text);
+  color: #FFFFFF;
 }
 
 /* ── Summary ────────────────────────────────────────────── */
@@ -97,9 +104,9 @@
 .filterBtn:focus-visible { outline: 3px solid var(--w-navy); outline-offset: 2px; }
 
 .filterActive {
-  background: var(--w-navy);
-  border-color: var(--w-navy);
-  color: black;
+  background: #1A1A1A;
+  border-color: #1A1A1A;
+  color: #FFFFFF;
 }
 
 .filterCount {

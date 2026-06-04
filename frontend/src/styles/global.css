@@ -88,8 +88,8 @@ body {
   font-size: var(--size-md);
   font-weight: var(--weight-normal);
   line-height: 1.6;
-  color: var(--color-text);
-  background: var(--color-bg);
+  color: #0D0D0D;
+  background: #FFFFFF;
   direction: rtl;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;

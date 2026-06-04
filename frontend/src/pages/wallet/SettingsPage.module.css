@@ -1,0 +1,301 @@
+.page {
+  min-height: 100%;
+  background: var(--w-bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px 16px;
+  background: #1C1C1E;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.backBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: background var(--w-transition);
+}
+.backBtn:hover { background: rgba(255,255,255,0.16); }
+.backBtn:focus-visible { outline: 3px solid var(--w-accent); outline-offset: 2px; }
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+/* ── Content ─────────────────────────────────────────────── */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 16px 32px;
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+.card {
+  background: var(--w-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--w-shadow);
+}
+
+.cardTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--w-text-muted);
+}
+
+/* ── Account ─────────────────────────────────────────────── */
+.avatarRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--w-accent);
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.displayName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.username {
+  font-size: 0.85rem;
+  color: var(--w-text-muted);
+  direction: ltr;
+  text-align: right;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Copy field ───────────────────────────────────────────── */
+.copyField {
+  background: var(--w-surface-2);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-xs);
+  padding: 10px 12px;
+}
+
+.copyLabel {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  margin-bottom: 4px;
+}
+
+.copyRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copyValue {
+  flex: 1;
+  font-size: 0.82rem;
+  color: var(--w-text);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.copyBtn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--w-radius-xs);
+  background: var(--w-bg);
+  border: 1px solid var(--w-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--w-text-2);
+  cursor: pointer;
+  transition: background var(--w-transition), color var(--w-transition);
+}
+.copyBtn:hover { background: var(--w-accent-light); color: var(--w-accent); }
+.copyBtnDone { background: var(--w-green-light); color: var(--w-green); border-color: var(--w-green); }
+
+/* ── Recovery words ──────────────────────────────────────── */
+.sectionHint {
+  font-size: 0.84rem;
+  color: var(--w-text-2);
+  line-height: 1.5;
+}
+
+.revealBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--w-surface-2);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-xs);
+  color: var(--w-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--w-transition);
+}
+.revealBtn:hover { background: var(--w-accent-light); }
+.revealBtn:focus-visible { outline: 3px solid var(--w-accent); outline-offset: 2px; }
+
+.wordGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.wordCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--w-bg);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-xs);
+  padding: 8px 10px;
+}
+
+.wordNum {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--w-accent);
+  min-width: 18px;
+  direction: ltr;
+}
+
+.wordText {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--w-text);
+}
+
+/* ── Security ─────────────────────────────────────────────── */
+.securityRows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.securityRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--w-border);
+}
+.securityRow:last-child { border-bottom: none; }
+
+.securityLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--w-text);
+}
+
+.securityDesc {
+  font-size: 0.78rem;
+  color: var(--w-text-muted);
+  margin-top: 2px;
+}
+
+.badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--w-accent-light);
+  color: var(--w-accent-dark);
+  padding: 3px 8px;
+  border-radius: var(--w-radius-pill);
+}
+
+/* ── App info ─────────────────────────────────────────────── */
+.infoRows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--w-border);
+}
+.infoRow:last-child { border-bottom: none; }
+
+.infoLabel {
+  font-size: 0.88rem;
+  color: var(--w-text-2);
+}
+
+.infoValue {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--w-text);
+}
+
+/* ── Logout ───────────────────────────────────────────────── */
+.logoutBtn {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--w-radius-sm);
+  background: transparent;
+  border: 1.5px solid var(--w-red);
+  color: var(--w-red);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--w-transition), color var(--w-transition);
+  margin-top: 4px;
+}
+.logoutBtn:hover { background: var(--w-red-light); }
+.logoutBtn:focus-visible { outline: 3px solid var(--w-red); outline-offset: 2px; }
+
+.logoutConfirm {
+  background: var(--w-red);
+  color: #fff;
+}
+.logoutConfirm:hover { background: #b91c1c; }
