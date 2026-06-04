@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import * as AuthService from '../../services/mock/auth.js';
 import { PROTECTION_LEVELS, RECOVERY_WORDS } from '../../services/storage.js';
 import { useWallet } from '../../contexts/WalletContext.jsx';
@@ -276,10 +276,12 @@ function LoginStep({ onSuccess, onSignup }) {
 
 // ── Root component ─────────────────────────────────────────
 export default function OnboardingPage() {
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
+  const location  = useLocation();
   const { signIn } = useWallet();
 
-  const [mode,    setMode]    = useState('signup'); // signup | login
+  // Landing page can pass { state: { mode: 'login' } } to open login directly
+  const [mode,    setMode]    = useState(location.state?.mode ?? 'signup');
   const [step,    setStep]    = useState(0);        // 0 | 1 | 2
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);

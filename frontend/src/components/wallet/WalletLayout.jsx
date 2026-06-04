@@ -6,9 +6,8 @@ import styles from './WalletLayout.module.css';
 
 export default function WalletLayout() {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
+  const navigate     = useNavigate();
   const { user, ready } = useWallet();
-  const hideNav = pathname === '/onboard' || pathname === '/deposit';
   const mainRef = useRef(null);
 
   useEffect(() => {
@@ -16,25 +15,25 @@ export default function WalletLayout() {
     return () => document.body.classList.remove('wallet-active');
   }, []);
 
+  // Unauthenticated users go to the landing page
   useEffect(() => {
-    if (ready && !user && pathname !== '/onboard') {
-      navigate('/onboard', { replace: true });
+    if (ready && !user) {
+      navigate('/landing', { replace: true });
     }
-  }, [ready, user, pathname, navigate]);
+  }, [ready, user, navigate]);
 
-  // Drive the --decor-opacity CSS variable from scroll position
+  // Drive --decor-opacity from scroll position
   useEffect(() => {
     const el = mainRef.current;
     if (!el) return;
-
     function onScroll() {
-      const opacity = Math.max(0, 1 - el.scrollTop / 160);
-      el.style.setProperty('--decor-opacity', opacity);
+      el.style.setProperty('--decor-opacity', Math.max(0, 1 - el.scrollTop / 160));
     }
-
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => el.removeEventListener('scroll', onScroll);
   }, []);
+
+  const hideNav = pathname === '/deposit';
 
   return (
     <div className={styles.root}>
