@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import * as AuthService from '../../services/mock/auth.js';
-import { PROTECTION_LEVELS, RECOVERY_WORDS } from '../../services/storage.js';
+import { PROTECTION_LEVELS } from '../../services/storage.js';
 import { useWallet } from '../../contexts/WalletContext.jsx';
 import styles from './OnboardingPage.module.css';
 
@@ -148,7 +148,8 @@ function ProtectionStep({ onNext, onBack }) {
 // ── Screen 2: Wallet created ───────────────────────────────
 function CreatedStep({ onDone }) {
   const [copied,  setCopied]  = useState(false);
-  const words = RECOVERY_WORDS;
+  const { user } = useWallet();
+  const words = user?.recoveryWords ?? [];
 
   function handleCopy() {
     navigator.clipboard?.writeText(words.join(' ')).catch(() => {});

@@ -1,6 +1,29 @@
 // Central persistence layer for PassIT.
 // All localStorage access goes through here.
 
+import { BIP39_WORDS } from '../data/bip39words.js';
+
+/**
+ * Generate 12 unique BIP-39 words using crypto.getRandomValues()
+ * for true randomness (never Math.random).
+ */
+export function generateRecoveryWords() {
+  const result = [];
+  const seen   = new Set();
+  const buf    = new Uint32Array(1);
+
+  while (result.length < 12) {
+    crypto.getRandomValues(buf);
+    const idx  = buf[0] % BIP39_WORDS.length; // 0–2047, uniform enough for UX
+    const word = BIP39_WORDS[idx];
+    if (!seen.has(word)) {
+      seen.add(word);
+      result.push(word);
+    }
+  }
+  return result;
+}
+
 const KEYS = {
   USER:    'passit_user',
   WALLET:  'passit_wallet',
@@ -43,12 +66,7 @@ export function getLevelByIndex(idx) {
   return PROTECTION_LEVELS[idx] ?? PROTECTION_LEVELS[1];
 }
 
-// ── BIP-39 style mock recovery words ──────────────────────
-export const RECOVERY_WORDS = [
-  'abandon', 'ability', 'able',     'about',
-  'above',   'absent',  'absorb',   'abstract',
-  'absurd',  'abuse',   'access',   'accident',
-];
+// (RECOVERY_WORDS removed — use generateRecoveryWords() for per-user uniqueness)
 
 // ── Empty wallet template ──────────────────────────────────
 const EMPTY_WALLET = {
@@ -85,7 +103,7 @@ export function createUserProfile({ name, email, protectionLevel = 'מאוזן' 
     protectionLevelIndex: levelIndex >= 0 ? levelIndex : 1,
     lightningAddress: `${username}@passitpay.co`,
     mockAddress:      `bc1q${username.padEnd(8, '0')}xk2fd7grs4qqzge`,
-    recoveryWords:    RECOVERY_WORDS,
+    recoveryWords:    generateRecoveryWords(),
     createdAt:        Date.now(),
   };
 }
