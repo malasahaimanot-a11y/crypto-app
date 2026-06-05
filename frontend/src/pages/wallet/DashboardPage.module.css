@@ -172,32 +172,37 @@
   border-radius: var(--w-radius-pill);
 }
 
-/* ── Split pills ─────────────────────────────────────── */
+/* ── Split bar — two-column card, no overflow on 375px ── */
 .splitRow {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  align-items: stretch;
   background: var(--w-surface);
   border: 1px solid var(--w-border);
   border-radius: var(--w-radius);
-  padding: 16px 20px;
   width: 100%;
   box-shadow: var(--w-shadow);
+  overflow: hidden;
 }
 
 .pillDivider {
-  width: 1px;
-  height: 32px;
   background: var(--w-border);
-  flex-shrink: 0;
-  margin: 0 16px;
+  width: 1px;
+  align-self: stretch;
 }
 
 .pill {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 14px 16px;
+  min-width: 0;
+}
+
+.pillHeader {
   display: flex;
   align-items: center;
-  gap: 7px;
-  min-width: 0;
+  gap: 6px;
 }
 
 .pillDot {
@@ -208,23 +213,27 @@
 }
 
 .pillLabel {
-  font-size: 0.8rem;
-  color: var(--w-text-2);
-  font-weight: 500;
+  font-size: 0.75rem;
+  color: var(--w-text-muted);
+  font-weight: 600;
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .pillAmount {
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--w-text);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pillPct {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--w-text-muted);
-  margin-right: auto;
+  font-weight: 500;
 }
 
 /* ── Action buttons ──────────────────────────────────── */

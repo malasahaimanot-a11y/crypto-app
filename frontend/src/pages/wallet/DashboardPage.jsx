@@ -89,21 +89,25 @@ export default function DashboardPage() {
           </p>
         )}
 
-        {/* Split pills — only show when there is a balance */}
+        {/* Split bar — only show when there is a balance */}
         {liveTotalILS > 0 && (
           <div className={styles.splitRow} role="list" aria-label="הרכב הסכום">
             <div className={styles.pill} role="listitem">
-              <span className={styles.pillDot} style={{ background: 'var(--w-accent)' }} aria-hidden="true"/>
-              <span className={styles.pillLabel}>Bitcoin</span>
+              <div className={styles.pillHeader}>
+                <span className={styles.pillDot} style={{ background: 'var(--w-accent)' }} aria-hidden="true"/>
+                <span className={styles.pillLabel}>Bitcoin</span>
+              </div>
               <span className={styles.pillAmount} dir="ltr">{formatILS(liveBtcILS, 0)}</span>
-              <span className={styles.pillPct} dir="ltr">{liveBtcPct}%</span>
+              {liveBtcPct > 0 && <span className={styles.pillPct} dir="ltr">{liveBtcPct}%</span>}
             </div>
             <div className={styles.pillDivider} aria-hidden="true"/>
             <div className={styles.pill} role="listitem">
-              <span className={styles.pillDot} style={{ background: 'var(--w-text-muted)' }} aria-hidden="true"/>
-              <span className={styles.pillLabel}>מוגן</span>
+              <div className={styles.pillHeader}>
+                <span className={styles.pillDot} style={{ background: 'var(--w-text-muted)' }} aria-hidden="true"/>
+                <span className={styles.pillLabel}>מוגן</span>
+              </div>
               <span className={styles.pillAmount} dir="ltr">{formatILS(protectedILS, 0)}</span>
-              <span className={styles.pillPct} dir="ltr">{liveProtPct}%</span>
+              {liveProtPct > 0 && <span className={styles.pillPct} dir="ltr">{liveProtPct}%</span>}
             </div>
           </div>
         )}

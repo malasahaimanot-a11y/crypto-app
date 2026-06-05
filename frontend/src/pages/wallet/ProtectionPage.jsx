@@ -5,19 +5,49 @@ import { PROTECTION_LEVELS } from '../../services/storage.js';
 import { useWallet } from '../../contexts/WalletContext.jsx';
 import styles from './ProtectionPage.module.css';
 
+// ── Confirmation modal ─────────────────────────────────────
+function ConfirmModal({ fromIdx, toIdx, onConfirm, onCancel }) {
+  const from = PROTECTION_LEVELS[fromIdx];
+  const to   = PROTECTION_LEVELS[toIdx];
+
+  return (
+    <div className={styles.overlay} role="dialog" aria-modal="true"
+      aria-labelledby="modal-title"
+      onClick={e => e.target === e.currentTarget && onCancel()}>
+      <div className={styles.modal}>
+        <span className={styles.modalIcon} aria-hidden="true">🔄</span>
+        <h2 className={styles.modalTitle} id="modal-title">שינוי מסלול הגנה</h2>
+        <p className={styles.modalBody}>
+          עובר מ<span className={styles.modalFrom}>{from?.label}</span>
+          {' '}ל<span className={styles.modalTo}>{to?.label}</span>.{' '}
+          שינוי זה ישפיע על אופן חלוקת הכסף שלך.
+        </p>
+        <div className={styles.modalBtns}>
+          <button className={styles.modalCancel} onClick={onCancel}>
+            ביטול
+          </button>
+          <button className={styles.modalConfirm} onClick={onConfirm}
+            autoFocus>
+            אישור
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main page ──────────────────────────────────────────────
 export default function ProtectionPage() {
   const navigate = useNavigate();
   const { wallet, updateProtectionLevel } = useWallet();
 
   const balance = wallet?.totalILS ?? 0;
 
-  // Local display state — always controlled by the slider/cards
-  const [level,  setLevel]  = useState(wallet?.protection?.level ?? 1);
-  const [saved,  setSaved]  = useState(false);
-  const [saveTimer, setSaveTimer] = useState(null);
+  const [level,        setLevel]        = useState(wallet?.protection?.level ?? 1);
+  const [pendingLevel, setPendingLevel] = useState(null); // null = no modal
+  const [saved,        setSaved]        = useState(false);
 
-  // BUG FIX: sync once when wallet first loads from localStorage
-  // (wallet is null on first render, then resolves via useEffect in WalletContext)
+  // Sync once when wallet loads from localStorage (async)
   useEffect(() => {
     if (wallet?.protection?.level !== undefined) {
       setLevel(wallet.protection.level);
@@ -28,24 +58,38 @@ export default function ProtectionPage() {
   const protectedAmt = balance * (current.protectedPct / 100);
   const btcAmt       = balance * (current.btcPct / 100);
 
-  // Auto-save immediately on any level change
-  function handleLevelChange(newIdx) {
-    if (newIdx === level) return;
-    setLevel(newIdx);
-    setSaved(false);
+  // Ask for confirmation before applying a change
+  function requestChange(newIdx) {
+    if (newIdx === level) return; // already selected — nothing to do
+    setPendingLevel(newIdx);
+  }
 
+  function applyChange() {
+    const newIdx = pendingLevel;
+    setPendingLevel(null);
+    setLevel(newIdx);
     const lvl = PROTECTION_LEVELS[newIdx];
     if (lvl) updateProtectionLevel(lvl.id);
-
-    // Show "נשמר" confirmation briefly
-    if (saveTimer) clearTimeout(saveTimer);
-    const t = setTimeout(() => setSaved(true), 80); // tiny delay so state is committed
-    setSaveTimer(t);
+    setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+  }
+
+  function cancelChange() {
+    setPendingLevel(null);
   }
 
   return (
     <div className={styles.page}>
+      {/* Confirmation modal */}
+      {pendingLevel !== null && (
+        <ConfirmModal
+          fromIdx={level}
+          toIdx={pendingLevel}
+          onConfirm={applyChange}
+          onCancel={cancelChange}
+        />
+      )}
+
       <header className={styles.header}>
         <button className={styles.backBtn} onClick={() => navigate('/')} aria-label="חזור">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
@@ -60,15 +104,13 @@ export default function ProtectionPage() {
       {/* ── Status card ── */}
       <div className={styles.statusCard} role="region" aria-label="סטטוס הגנה נוכחי">
         <p className={styles.statusQuestion}>כמה מהכסף שלך מוגן עכשיו?</p>
-
         <div className={styles.progressRow} aria-hidden="true">
           <div className={styles.progressBar}>
             <div className={styles.progressFill}
-              style={{ width: `${current.protectedPct}%`, transition: 'width 300ms ease' }}/>
+              style={{ width: `${current.protectedPct}%`, transition: 'width 350ms ease' }}/>
           </div>
           <span className={styles.progressPct} dir="ltr">{current.protectedPct}%</span>
         </div>
-
         <p className={styles.statusDesc} aria-live="polite">
           <span dir="ltr">{formatILS(protectedAmt, 0)}</span>
           {' '}מוגן מתוך{' '}
@@ -104,7 +146,7 @@ export default function ProtectionPage() {
         <div className={styles.sliderWrap} dir="ltr">
           <input type="range" min="0" max="3" step="1"
             value={level}
-            onChange={e => handleLevelChange(Number(e.target.value))}
+            onChange={e => requestChange(Number(e.target.value))}
             className="wSlider"
             aria-label="רמת הגנה"
             aria-valuetext={current.label}
@@ -116,7 +158,7 @@ export default function ProtectionPage() {
             {PROTECTION_LEVELS.map((l, i) => (
               <button key={l.id}
                 className={`${styles.levelLabel} ${i === level ? styles.levelLabelActive : ''}`}
-                onClick={() => handleLevelChange(i)}
+                onClick={() => requestChange(i)}
                 aria-pressed={i === level}>
                 <span className={styles.levelLabelText}>{l.label}</span>
                 <span className={styles.levelPct} dir="ltr">{l.protectedPct}%</span>
@@ -135,7 +177,6 @@ export default function ProtectionPage() {
             <p className={styles.levelCardSub}>{current.desc}</p>
           </div>
         </div>
-
         <div className={styles.levelCardBars}>
           {[
             { label: 'מוגן',    pct: current.protectedPct, cls: styles.levelBarProtected },
@@ -145,7 +186,7 @@ export default function ProtectionPage() {
               <span className={styles.levelBarLabel}>{b.label}</span>
               <div className={styles.levelBarTrack}>
                 <div className={`${styles.levelBarFill} ${b.cls}`}
-                  style={{ width: `${b.pct}%`, transition: 'width 300ms ease' }}/>
+                  style={{ width: `${b.pct}%`, transition: 'width 350ms ease' }}/>
               </div>
               <span className={styles.levelBarPct} dir="ltr">{b.pct}%</span>
             </div>
@@ -153,14 +194,14 @@ export default function ProtectionPage() {
         </div>
       </div>
 
-      {/* ── Save confirmation (auto-saves, button just shows status) ── */}
+      {/* ── Auto-save status ── */}
       <div className={styles.saveWrap}>
         {saved ? (
           <div className={styles.savedConfirm} role="status" aria-live="polite">
             <span aria-hidden="true">✓</span> נשמר בהצלחה
           </div>
         ) : (
-          <p className={styles.saveHint}>השינויים נשמרים אוטומטית</p>
+          <p className={styles.saveHint}>השינויים נשמרים אוטומטית לאחר אישור</p>
         )}
       </div>
     </div>
