@@ -53,10 +53,22 @@ export function WalletProvider({ children }) {
   const updateProtectionLevel = useCallback((levelId) => {
     const idx = storage.PROTECTION_LEVELS.findIndex(l => l.id === levelId);
     const levelIndex = idx >= 0 ? idx : 1;
+    const lvl = storage.PROTECTION_LEVELS[levelIndex];
 
     setWallet(prev => {
       if (!prev) return prev;
-      const next = { ...prev, protection: { isActive: true, level: levelIndex } };
+      // Rebalance existing funds to match the new level's split ratios
+      const total   = prev.totalILS ?? 0;
+      const btcRate = prev.btcRateILS ?? 56500;
+      const newGrowing = Math.round(total * (lvl.btcPct / 100));
+      const newProt    = total - newGrowing;
+      const next = {
+        ...prev,
+        growingILS:   newGrowing,
+        protectedILS: newProt,
+        btcAmount:    +(newGrowing / btcRate).toFixed(6),
+        protection:   { isActive: true, level: levelIndex },
+      };
       storage.saveWallet(next);
       return next;
     });

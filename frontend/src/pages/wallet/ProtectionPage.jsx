@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { formatILS } from '../../data/mockWalletData.js';
 import { PROTECTION_LEVELS } from '../../services/storage.js';
 import { useWallet } from '../../contexts/WalletContext.jsx';
@@ -11,10 +12,20 @@ function ConfirmModal({ fromIdx, toIdx, onConfirm, onCancel }) {
   const to   = PROTECTION_LEVELS[toIdx];
 
   return (
-    <div className={styles.overlay} role="dialog" aria-modal="true"
-      aria-labelledby="modal-title"
-      onClick={e => e.target === e.currentTarget && onCancel()}>
-      <div className={styles.modal}>
+    <motion.div
+      className={styles.overlay}
+      role="dialog" aria-modal="true" aria-labelledby="modal-title"
+      onClick={e => e.target === e.currentTarget && onCancel()}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.18 }}>
+      <motion.div
+        className={styles.modal}
+        initial={{ scale: 0.88, opacity: 0, y: 16 }}
+        animate={{ scale: 1,    opacity: 1, y: 0 }}
+        exit={{ scale: 0.88, opacity: 0, y: 8 }}
+        transition={{ type: 'spring', stiffness: 420, damping: 26 }}>
         <span className={styles.modalIcon} aria-hidden="true">🔄</span>
         <h2 className={styles.modalTitle} id="modal-title">שינוי מסלול הגנה</h2>
         <p className={styles.modalBody}>
@@ -31,8 +42,8 @@ function ConfirmModal({ fromIdx, toIdx, onConfirm, onCancel }) {
             אישור
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -80,15 +91,17 @@ export default function ProtectionPage() {
 
   return (
     <div className={styles.page}>
-      {/* Confirmation modal */}
-      {pendingLevel !== null && (
+      {/* Confirmation modal — AnimatePresence for smooth exit */}
+      <AnimatePresence>
+        {pendingLevel !== null && (
         <ConfirmModal
           fromIdx={level}
           toIdx={pendingLevel}
           onConfirm={applyChange}
           onCancel={cancelChange}
         />
-      )}
+        )}
+      </AnimatePresence>
 
       <header className={styles.header}>
         <button className={styles.backBtn} onClick={() => navigate('/')} aria-label="חזור">
@@ -156,13 +169,15 @@ export default function ProtectionPage() {
           />
           <div className={styles.sliderLabels}>
             {PROTECTION_LEVELS.map((l, i) => (
-              <button key={l.id}
+              <motion.button key={l.id}
                 className={`${styles.levelLabel} ${i === level ? styles.levelLabelActive : ''}`}
                 onClick={() => requestChange(i)}
-                aria-pressed={i === level}>
+                aria-pressed={i === level}
+                whileHover={{ scale: i !== level ? 1.05 : 1 }}
+                whileTap={{ scale: 0.94, transition: { type: 'spring', stiffness: 400 } }}>
                 <span className={styles.levelLabelText}>{l.label}</span>
                 <span className={styles.levelPct} dir="ltr">{l.protectedPct}%</span>
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>
